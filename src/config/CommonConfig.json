@@ -1,0 +1,9 @@
+{
+    "mqttClientOptions": {
+        "port": 39001,
+        "host": "mqtts://mqtts.3pi-solutions.com"
+        },
+    "mqttTOPIC": "RFID",
+    "mqttGroupID": "+",
+    "mqttPlaceID": "hotel"
+}

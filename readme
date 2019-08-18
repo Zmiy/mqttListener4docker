@@ -1,0 +1,1 @@
+docker build subscriber_app_alpine:v1wtz .
