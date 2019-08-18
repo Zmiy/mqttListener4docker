@@ -16,12 +16,15 @@ print(broker)
 port = config['mqttClientOptions']['port'];
 certPath = config['mqttCertificatePath'];
 # time to live
-timelive = 20;
+timelive = 40;
 # subscribe topic
-mqttTopic = config['mqttPlaceID'] + "/" + config['mqttGroupID'] + "/" + config['mqttTOPIC']
+print(config['mqttPlaceID'] + "/" + config['mqttGroupID'] + "/" + config['mqttTOPIC']);
+mqttTopic = config['mqttPlaceID'] + "/" + config['mqttGroupID'] + "/" + config['mqttTOPIC'];
 
-mqttUsr = config['mqttClientOptions'].get('usr',"");
-# mqttPsw = config['mqttClientOptions']['psw'];
+mqttUsr = config['mqttClientOptions'].get('mqttUsr',None);
+mqttPsw = config['mqttClientOptions'].get('mqttPsw', None);
+mqttUsr = None if mqttUsr == "" else mqttUsr;
+print (mqttUsr);
 
 dic_lastValues = {}
 
@@ -30,6 +33,9 @@ def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
     client.subscribe(mqttTopic)
 
+def on_subscribe(client, userdata, mid, granted_qos):
+    print("Subscribed ", client.topic, userdata);
+    pass 
 
 def on_publish(client, userdata, result):
     print("An alarm message was published.")
@@ -102,13 +108,15 @@ def on_message(client, userdata, msg):
 
 client = mqtt.Client('pythonClient');
 print(certPath);
-print(certPath +'/server.crt',certPath + '/client.crt', certPath + '/client.key');
-client.tls_set(certPath +'/server.crt', certPath+'/client.crt', certPath+'/client.key', ssl.CERT_REQUIRED,
+print(certPath + '/server.crt',certPath + '/client.crt', certPath + '/client.key');
+client.tls_set(certPath + '/server.crt', certPath + '/client.crt', certPath + '/client.key', ssl.CERT_REQUIRED,
                ssl.PROTOCOL_TLSv1_2)
-#if mqttUsr:
-#    client.username_pw_set (mqttUsr, mqttPsw)
+if mqttUsr != None:
+    print("user/password: ",mqttUsr,"/", mqttPsw)
+    client.username_pw_set(mqttUsr, mqttPsw)
 client.connect(broker, port, timelive)
 client.on_connect = on_connect
 client.on_message = on_message
 client.on_publish = on_publish
+client.on_subscribe = on_subscribe
 client.loop_forever()

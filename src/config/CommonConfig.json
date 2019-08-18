@@ -1,10 +1,12 @@
 {
     "mqttClientOptions": {
-        "port": 39001,
-        "host": "mqtts.3pi-solutions.com"
+        "port": 443,
+        "host": "mqtt.wigidex.com",
+        "mqttUsr": "rothschild22",
+	"mqttPsw": "rothschild22!pass"		
         },
     "mqttTOPIC": "RFID",
     "mqttGroupID": "+",
-    "mqttPlaceID": "hotel",
-    "mqttCertificatePath": "config/3pi-solution.cert"	
+    "mqttPlaceID": "rothschild22",
+    "mqttCertificatePath": "config/wigidex.cert"	
 }

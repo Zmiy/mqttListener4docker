@@ -13,7 +13,6 @@ RUN pip install psycopg2
 RUN pip install paho-mqtt
 WORKDIR /usr/src/app
 COPY ./src/config/ .
-COPY ./src/cert/ .
 COPY ./src/. .
 
 CMD ["python", "./subscriber_3pi.py"]

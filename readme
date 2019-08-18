@@ -1,1 +1,1 @@
-docker build subscriber_app_alpine:v1wtz .
+docker build -t subscriber_app_alpine:v1wtz .
