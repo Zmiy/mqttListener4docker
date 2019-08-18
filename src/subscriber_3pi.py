@@ -10,14 +10,19 @@ with open("config/CommonConfig.json", 'r') as f:
 
 # This is the Subscriber
 # hostname
-broker = "mqtts.3pi-solutions.com"  # config['mqttClientOptions']['host'];  #
+broker =  config['mqttClientOptions']['host'];  
 print(broker)
 # port
-port = 39001;  # config['mqttClientOptions']['port']
+port = config['mqttClientOptions']['port'];
+certPath = config['mqttCertificatePath'];
 # time to live
 timelive = 20;
 # subscribe topic
 mqttTopic = config['mqttPlaceID'] + "/" + config['mqttGroupID'] + "/" + config['mqttTOPIC']
+
+mqttUsr = config['mqttClientOptions'].get('usr',"");
+# mqttPsw = config['mqttClientOptions']['psw'];
+
 dic_lastValues = {}
 
 
@@ -95,9 +100,13 @@ def on_message(client, userdata, msg):
             print("PostgreSQL connection is closed")
 
 
-client = mqtt.Client('pythonClient')
-client.tls_set('cert/3pi-solutions-CA.crt', 'cert/client2048.crt', 'cert/client2048.key', ssl.CERT_REQUIRED,
+client = mqtt.Client('pythonClient');
+print(certPath);
+print(certPath +'/server.crt',certPath + '/client.crt', certPath + '/client.key');
+client.tls_set(certPath +'/server.crt', certPath+'/client.crt', certPath+'/client.key', ssl.CERT_REQUIRED,
                ssl.PROTOCOL_TLSv1_2)
+#if mqttUsr:
+#    client.username_pw_set (mqttUsr, mqttPsw)
 client.connect(broker, port, timelive)
 client.on_connect = on_connect
 client.on_message = on_message
